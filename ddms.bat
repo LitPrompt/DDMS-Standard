@@ -1,4 +1,7 @@
 @echo off
+rem Check we have a valid Java.exe in the path.
+set java_exe=%USERPROFILE%/.sdkman/candidates/java/current/bin/java
+
 rem Copyright (C) 2007 The Android Open Source Project
 rem
 rem Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,9 +30,6 @@ cd /d %~dp0
 rem Get the CWD as a full path with short names only (without spaces)
 for %%i in ("%cd%") do set prog_dir=%%~fsi
 
-rem Check we have a valid Java.exe in the path.
-set java_exe=
-call lib\find_java.bat
 if not defined java_exe goto :EOF
 
 set jarfile=ddms.jar
@@ -70,5 +70,6 @@ set javaextdirs=%swt_path%;%frameworkdir%
 
 echo The standalone version of DDMS is deprecated.
 echo Please use Android Device Monitor (monitor.bat) instead.
-call "%java_exe%" %java_debug% "-Dcom.android.ddms.bindir=%prog_dir%" -classpath "%jarpath%;%swt_path%\swt.jar" com.android.ddms.Main %*
+
+call "%java_exe%" %java_debug% "-Djava.library.path=%frameworkdir%\x86_64" -classpath "%jarpath%;%swt_path%\swt.jar" com.android.ddms.Main %*
 
